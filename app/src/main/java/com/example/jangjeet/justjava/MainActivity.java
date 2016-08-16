@@ -26,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * This method is called when increment button is clicked.
+     * If user tries to order more than 100 cups it displays a Toast message.
      */
     public void increment(View view) {
         if (quantity >= 100) {
@@ -42,19 +43,37 @@ public class MainActivity extends ActionBarActivity {
      */
     public void submitOrder(View view) {
 
+    	/**
+ * Reads the name that the customer enters at the prompt.
+ */
         TextView name = (TextView) findViewById(R.id.name);
         String custName = name.getText().toString();
 
+        /**
+ * Checks if the coustomer selected whipped cream as a topping.
+ */
         CheckBox whippedCream = (CheckBox) findViewById(R.id.Whipped_cream);
         boolean hasWhippedCream = whippedCream.isChecked();
 
+        /**
+ * Checks if the customer selected chocolate as a topping.
+ */
         CheckBox chocolate = (CheckBox) findViewById(R.id.Chocolate);
         boolean hasChocolate = chocolate.isChecked();
 
+        /**
+ * calls the price calculation method and passes the topping options as args.
+ */
         int price = calculatePrice(hasWhippedCream, hasChocolate);
 
+        /**
+ * calls the order summary method.
+ */
         String message = createOrderSummary(price, hasWhippedCream, hasChocolate, custName);
 
+        /**
+ * Opens up the email client and fills up the order details along with the customer name.
+ */
         Intent email = new Intent(Intent.ACTION_SENDTO);
         email.setData(Uri.parse("mailto:"));
         email.putExtra(Intent.EXTRA_EMAIL, "skorpion63@gmail.com");
@@ -85,11 +104,17 @@ public class MainActivity extends ActionBarActivity {
         return price;
     }
 
-
+    /**
+ * prepares the order summary.
+ */
     public String createOrderSummary(int price, boolean whippedCream, boolean chocolate, String custName) {
         return "Name: " + custName + "\nAdd whipped cream? " + whippedCream + "\nAdd chocolate? " + chocolate + "\nQuantity: " + quantity + "\nTotal: $" + price + "\nThank You!";
     }
 
+    /**
+ * This method is called wen decrement button is pressed,It also displays a toast merssage if user
+ * tries to order less than one cup of coffee.
+ */
     public void decrement(View view) {
         if (quantity <= 1) {
             Toast.makeText(getApplicationContext(), "ARE YOU STUPID", Toast.LENGTH_SHORT).show();
